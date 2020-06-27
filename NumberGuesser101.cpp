@@ -1,20 +1,107 @@
-// NumberGuesser101.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
-#include <iostream>
+#include <NumberGuesser101.h>
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    isGameOver = false;
+    max = 50;
+    maxLives = 5;
+    lives = maxLives;
+    StartNewGame();
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+void StartNewGame()
+{
+    std::cout.clear();
+    std::cout << "Welcome to Number Guesser 101\n";
+    std::cout << "I am thinking of a number between 1 and " << max << "... Can you guess what it is?\n";
+    SetAnswer();
+    Play();
+    if (isGameOver) {
+        PlayAgain();
+    }
+}
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+void SetAnswer()
+{
+    srand((unsigned)time(0));
+    answer = rand() % max + 1;
+}
+
+void Play()
+{
+    std::cout << "Lives: " << lives << std::endl;
+    int guess = GetPlayerGuess();
+    CheckAnswer(guess);
+}
+
+int GetPlayerGuess()
+{
+    std::cout << "Enter a guess: ";
+    int playerGuess;
+    try {
+        std::string playerInput;
+        std::cin >> playerInput;
+        playerGuess = std::stoi(playerInput);
+    }
+    catch(std::exception e) {
+        std::cout << "Come on now... ";
+        playerGuess = 0;
+    }
+    return playerGuess;
+}
+
+void CheckAnswer(const int& guess)
+{
+    std::cout << "You guessed " << guess << std::endl;
+    if (guess == answer)
+    {
+        std::cout << "YOU WIN!\n";
+        isGameOver = true;
+        return;
+    }
+    else if (guess > answer)
+    {
+        std::cout << "Too high!\n";
+    }
+    else
+    {
+        std::cout << "Too low!\n";
+    }
+    --lives;
+
+    if (lives == 0)
+    {
+        GameOver();
+    }
+    else
+    {
+        Play();
+    }
+}
+
+void GameOver()
+{
+    std::cout << "You are out of lives! GAME OVER\n";
+    isGameOver = true;
+}
+
+void PlayAgain()
+{
+    std::string c;
+    do {
+        std::cout << "Play again? (y/n) ";
+        std::cin >> c;
+    } while (c != "y" && c != "n");
+
+    if (c == "y")
+    {
+        lives = maxLives;
+        system("CLS");
+        StartNewGame();
+    }
+    else if (c == "n")
+    {
+        std::cout << c;
+        std::cout << "Goodbye!\n";
+    }
+}
