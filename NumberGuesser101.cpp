@@ -11,7 +11,6 @@ int main()
 
 void StartNewGame()
 {
-    std::cout.clear();
     std::cout << "Welcome to Number Guesser 101\n";
     std::cout << "I am thinking of a number between 1 and " << max << "... Can you guess what it is?\n";
     SetAnswer();
